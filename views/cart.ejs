@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+</head>
+<body>
+    Your cart
+    <br>
+    <a href="/">Home</a>
+    <a href="/logout">Logout</a>
+    <hr>
+    <%cart.items.forEach((item)=>{%>
+       <h2><%=item.title%></h2>
+       <h3><%=item.price %></h3>
+       <h3><%= item.rating %></h3>
+       <button class="deletebutton" value="<%= item.id %>">Delete Item</button>
+       <hr>
+    <%}) %>
+</body>
+<script>
+    
+    let handleButtonClick = function(event){
+        console.log(event.target.value)
+        fetch('/cart', {
+            method: 'DELETE',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id: event.target.value}),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            // Handle the response as needed
+            if(data.Status === 200)
+                window.location.href = '/cart';
+            else
+                alert('Item not removed from Cart');
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            // Handle errors
+            alert('Issue from server-side');
+        });
+    }
+    let buttons = document.querySelectorAll('.deletebutton');
+    buttons.forEach((button) => {
+        button.addEventListener('click', handleButtonClick);
+    });
+
+    </script>
+</html>

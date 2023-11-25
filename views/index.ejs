@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+</head>
+<body>
+    <% if(username === null) {%>
+    Welcome To ShopCart
+    <br>
+    <a href="/login">Login</a>
+    <a href="/signin">Sign In</a>
+<% }else{ %>
+    Welcome To ShopCart - <%= username %>
+    <br>
+    <a href="/logout">Logout</a>
+    <a href="/cart">My Cart</a>
+    <% } %>
+    <hr>
+    <%products.forEach((item)=>{%>
+       <h2><%=item.title%></h2>
+       <h3><%=item.price %></h3>
+       <h3><%= item.rating %></h3> 
+       <% if(item.cart){ %>
+        <button value="<%= item._id %>">Added</button>
+        <% } %>
+        <% if(!item.cart){ %>
+       <button class="putButton" value="<%= item._id %>">Add to CART</button>
+       <% } %>
+       <%}) %>
+    <hr>
+</body>
+<script>
+    
+    let handleButtonClick = function(event){
+        console.log(event.target.value)
+        fetch('/', {
+            method: 'PUT',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id: event.target.value}),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            // Handle the response as needed
+            if(data.Status === 200)
+                window.location.href = '/';
+            else if(data.message = 'Not Logged In')
+                window.location.href = '/login';
+            else
+                alert('Item not added to Cart');
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            // Handle errors
+            alert('Issue from server-side');
+        });
+    }
+    let buttons = document.querySelectorAll('.putButton');
+    buttons.forEach((button) => {
+        button.addEventListener('click', handleButtonClick);
+    });
+
+    </script>
+</html>

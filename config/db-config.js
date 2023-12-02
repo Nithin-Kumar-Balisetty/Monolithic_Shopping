@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const MONGODB_URI = 'mongodb+srv://team27:ICLgBlsh6J5RvXZX@finalproject0.5sdlu.mongodb.net/Monolith_v1'
+const MONGODB_URI = '<MONGODB_URI>'
 
 mongoose.connect(MONGODB_URI, {})
   .then(() => {
